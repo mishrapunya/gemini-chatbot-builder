@@ -68,7 +68,43 @@ with st.sidebar:
     )
     if temperature != st.session_state.temperature:
         st.session_state.temperature = temperature
+
+    # Document upload section
+    st.header("Reference Documents")
+    uploaded_files = st.file_uploader(
+        "Upload documents for context (PDF, DOCX, TXT)",
+        accept_multiple_files=True
+    )
     
+    # Initialize document context in session state if not present
+    if "document_context" not in st.session_state:
+        st.session_state.document_context = ""
+    
+    # Process documents button
+    if uploaded_files and st.button("Process Documents"):
+        document_text = ""
+        for file in uploaded_files:
+            try:
+                if file.name.endswith('.pdf'):
+                    import PyPDF2
+                    reader = PyPDF2.PdfReader(file)
+                    for page in reader.pages:
+                        document_text += page.extract_text() + "\n"
+                elif file.name.endswith('.docx'):
+                    import docx
+                    doc = docx.Document(file)
+                    for para in doc.paragraphs:
+                        document_text += para.text + "\n"
+                else:  # Assume text file
+                    document_text += file.getvalue().decode("utf-8") + "\n"
+                
+                document_text += f"\n--- End of {file.name} ---\n\n"
+            except Exception as e:
+                st.error(f"Error processing {file.name}: {e}")
+        
+        st.session_state.document_context = document_text
+        st.success(f"Processed {len(uploaded_files)} document(s)")
+        
     # Reset chat button
     if st.button("Reset Chat"):
         st.session_state.messages = []
@@ -84,15 +120,19 @@ system_prompt = st.text_area(
 if system_prompt != st.session_state.system_prompt:
     st.session_state.system_prompt = system_prompt
 
-# Function to get response from Gemini
 def get_gemini_response(prompt):
     try:
         # Add API key check
         if not api_key:
             return "Please enter your Google Gemini API Key in the sidebar to continue."
         
-        # Prepare context with system prompt and chat history
+        # Prepare context with system prompt, document context, and chat history
         context = f"System Instructions: {st.session_state.system_prompt}\n\n"
+        
+        # Add document context if available
+        if st.session_state.document_context:
+            context += f"Reference Information:\n{st.session_state.document_context}\n\n"
+        
         context += "Previous Messages:\n"
         for msg in st.session_state.messages[:-1]:  # Exclude the latest message
             context += f"{msg['role'].title()}: {msg['content']}\n"
@@ -106,6 +146,7 @@ def get_gemini_response(prompt):
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
+
 
 # Chat interface
 st.header(f"Test Your Bot: {st.session_state.bot_name}")
