@@ -2,6 +2,8 @@ import streamlit as st
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+import json
+import base64
 
 # Page configuration
 st.set_page_config(
@@ -104,7 +106,40 @@ with st.sidebar:
         
         st.session_state.document_context = document_text
         st.success(f"Processed {len(uploaded_files)} document(s)")
+
+# Export Configuration
+    st.header("Export Configuration")
+    
+    if st.button("Export Settings"):
+        # Create settings dictionary
+        settings = {
+            "bot_name": st.session_state.bot_name,
+            "temperature": st.session_state.temperature,
+            "model": st.session_state.model
+        }
         
+        # Convert settings to JSON
+        settings_json = json.dumps(settings, indent=2)
+        
+        # Create downloadable links
+        st.markdown("### Download Configuration Files")
+        
+        # Settings JSON file
+        settings_b64 = base64.b64encode(settings_json.encode()).decode()
+        settings_href = f'<a href="data:application/json;base64,{settings_b64}" download="settings.json">Download settings.json</a>'
+        st.markdown(settings_href, unsafe_allow_html=True)
+        
+        # System prompt file
+        prompt_b64 = base64.b64encode(st.session_state.system_prompt.encode()).decode()
+        prompt_href = f'<a href="data:text/plain;base64,{prompt_b64}" download="system_prompt.txt">Download system_prompt.txt</a>'
+        st.markdown(prompt_href, unsafe_allow_html=True)
+        
+        # Sample initial prompts file (empty template)
+        sample_prompts = "What services do you offer?\nHow can I get started?\nTell me more about your company."
+        prompts_b64 = base64.b64encode(sample_prompts.encode()).decode()
+        prompts_href = f'<a href="data:text/plain;base64,{prompts_b64}" download="initial_prompts.txt">Download initial_prompts.txt</a>'
+        st.markdown(prompts_href, unsafe_allow_html=True)
+    
     # Reset chat button
     if st.button("Reset Chat"):
         st.session_state.messages = []
