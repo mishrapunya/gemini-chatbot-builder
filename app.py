@@ -246,38 +246,56 @@ with st.expander("Guidance for Creating Effective System Prompts", expanded=Fals
     ```
     """)
 
-# Create columns for the controls
-col1, col2, col3 = st.columns([1, 1, 2])
+# Template selection section
+st.subheader("Choose a Template")
+selected_template = st.selectbox(
+    "Select a starting template:",
+    options=list(templates.keys()),
+    index=0
+)
 
-with col1:
-    # Add a toggle for expanded view
-    expanded_view = st.toggle("Expanded View", value=False)
+# Show template parameters based on selection
+if selected_template == "Punny Professor":
+    col1, col2 = st.columns(2)
+    with col1:
+        domain = st.text_input("Subject Domain", value="Science")
+    with col2:
+        education_level = st.selectbox("Education Level", ["Elementary", "Middle School", "High School", "Undergraduate", "Graduate"])
+    
+    if st.button("Use This Template"):
+        st.session_state.system_prompt = templates[selected_template].format(domain=domain, education_level=education_level)
+        st.success(f"{selected_template} template copied to system prompt!")
 
-with col2:
-    # Add a button to use the template
-    if st.button("Use Template"):
-        st.session_state.system_prompt = template
-        st.success("Template copied to system prompt!")
+elif selected_template == "Analogy Creator":
+    col1, col2 = st.columns(2)
+    with col1:
+        domain = st.text_input("Subject Domain", value="Science")
+    with col2:
+        education_level = st.selectbox("Education Level", ["Elementary", "Middle School", "High School", "Undergraduate", "Graduate"])
+    
+    if st.button("Use This Template"):
+        st.session_state.system_prompt = templates[selected_template].format(domain=domain, education_level=education_level)
+        st.success(f"{selected_template} template copied to system prompt!")
 
-# Empty column for spacing
-with col3:
-    pass
+elif selected_template == "Customer Support from Hell":
+    col1, col2 = st.columns(2)
+    with col1:
+        company_name = st.text_input("Company Name", value="TechCorp")
+    with col2:
+        product_type = st.text_input("Product Type", value="cloud software solutions")
+    
+    if st.button("Use This Template"):
+        st.session_state.system_prompt = templates[selected_template].format(company_name=company_name, product_type=product_type)
+        st.success(f"{selected_template} template copied to system prompt!")
 
-if expanded_view:
-    # Full-width expanded view for the system prompt
-    st.markdown("### System Prompt (Expanded View)")
-    system_prompt = st.text_area(
-        "Enter instructions for how your bot should behave:",
-        height=600,
-        value=st.session_state.system_prompt
-    )
-else:
-    # Normal view
-    system_prompt = st.text_area(
-        "Enter instructions for how your bot should behave:",
-        height=400,
-        value=st.session_state.system_prompt
-    )
+else:  # Basic Assistant
+    if st.button("Use This Template"):
+        st.session_state.system_prompt = templates[selected_template].format(bot_name=st.session_state.bot_name)
+        st.success(f"{selected_template} template copied to system prompt!")
+
+# Expanded view toggle
+st.subheader("System Prompt")
+expanded_view = st.toggle("Expanded View", value=False)
 
 if system_prompt != st.session_state.system_prompt:
     st.session_state.system_prompt = system_prompt
