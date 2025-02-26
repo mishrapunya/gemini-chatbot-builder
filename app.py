@@ -46,9 +46,10 @@ with st.sidebar:
         genai.configure(api_key=api_key)
     
     # Bot name
-    bot_name = st.text_input("Bot Name", value=st.session_state.bot_name)
-    if bot_name != st.session_state.bot_name:
-        st.session_state.bot_name = bot_name
+bot_name = st.text_input("Bot Name", value=st.session_state.bot_name)
+if bot_name != st.session_state.bot_name:
+    st.session_state.bot_name = bot_name
+    st.rerun()  # Add this line to force the UI to update
     
     # Model selection
     model_option = st.selectbox(
