@@ -297,6 +297,21 @@ else:  # Basic Assistant
 st.subheader("System Prompt")
 expanded_view = st.toggle("Expanded View", value=False)
 
+if expanded_view:
+    # Full-width expanded view for the system prompt
+    system_prompt = st.text_area(
+        "Enter instructions for how your bot should behave:",
+        height=600,
+        value=st.session_state.system_prompt
+    )
+else:
+    # Normal view
+    system_prompt = st.text_area(
+        "Enter instructions for how your bot should behave:",
+        height=400,
+        value=st.session_state.system_prompt
+    )
+
 if system_prompt != st.session_state.system_prompt:
     st.session_state.system_prompt = system_prompt
 
