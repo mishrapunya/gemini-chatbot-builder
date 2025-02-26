@@ -203,14 +203,23 @@ with st.expander("Guidance for Creating Effective System Prompts", expanded=Fals
     """ + template + """
     ```
     """)
-    
-    # Add a button to use the template
-    if st.button("Use This Template"):
-        st.session_state.system_prompt = template
-        st.success("Template copied to the system prompt area!")
 
-# Add a toggle for expanded view
-expanded_view = st.toggle("Expanded View", value=False)
+# Create columns for the controls
+col1, col2, col3 = st.columns([1, 1, 2])
+
+with col1:
+    # Add a toggle for expanded view
+    expanded_view = st.toggle("Expanded View", value=False)
+
+with col2:
+    # Add a button to use the template
+    if st.button("Use Template"):
+        st.session_state.system_prompt = template
+        st.success("Template copied to system prompt!")
+
+# Empty column for spacing
+with col3:
+    pass
 
 if expanded_view:
     # Full-width expanded view for the system prompt
@@ -230,7 +239,6 @@ else:
 
 if system_prompt != st.session_state.system_prompt:
     st.session_state.system_prompt = system_prompt
-
 
 def get_gemini_response(prompt):
     try:
