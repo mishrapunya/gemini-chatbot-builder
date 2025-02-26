@@ -145,13 +145,29 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
-# Main content area - System Prompt
+
+# Main content area - System Prompt with expanded view option
 st.header("System Prompt")
-system_prompt = st.text_area(
-    "Enter instructions for how your bot should behave:",
-    height=400,
-    value=st.session_state.system_prompt
-)
+
+# Add a toggle for expanded view
+expanded_view = st.toggle("Expanded View", value=False)
+
+if expanded_view:
+    # Full-width expanded view for the system prompt
+    st.markdown("### System Prompt (Expanded View)")
+    system_prompt = st.text_area(
+        "Enter instructions for how your bot should behave:",
+        height=600,
+        value=st.session_state.system_prompt
+    )
+else:
+    # Normal view
+    system_prompt = st.text_area(
+        "Enter instructions for how your bot should behave:",
+        height=400,
+        value=st.session_state.system_prompt
+    )
+
 if system_prompt != st.session_state.system_prompt:
     st.session_state.system_prompt = system_prompt
 
