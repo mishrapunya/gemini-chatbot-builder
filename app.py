@@ -149,6 +149,57 @@ with st.sidebar:
 # Main content area - System Prompt with expanded view option
 st.header("System Prompt")
 
+# Add guidance for creating effective system prompts
+with st.expander("Guidance for Creating Effective System Prompts", expanded=False):
+    st.markdown("""
+    ### Elements of an Effective System Prompt
+    
+    #### 1. Role / Persona
+    Define the chatbot's identity, expertise, and overall demeanor.
+    *Example: "You are a knowledgeable customer support specialist for a software company."*
+    
+    #### 2. Purpose / Objective
+    State the chatbot's primary function and intended goals.
+    *Example: "Your purpose is to help users troubleshoot technical issues and guide them to appropriate resources."*
+    
+    #### 3. Context / Background
+    Provide any relevant situational or organizational information.
+    *Example: "You represent TechCorp, which offers cloud-based productivity software."*
+    
+    #### 4. Style and Tone Guidelines
+    Specify language usage, formality level, and stylistic preferences.
+    *Example: "Maintain a professional but friendly tone. Use simple language without jargon when possible."*
+    
+    #### 5. Output Format / Structure
+    Outline how responses should be organized or formatted.
+    *Example: "For troubleshooting, present steps in a numbered list. For complex explanations, use bullet points."*
+    
+    #### 6. Constraints and Prohibitions
+    List topics, behaviors, or actions the bot must avoid.
+    *Example: "Do not provide specific pricing information. Refer pricing questions to our website."*
+    
+    #### 7. Disclaimers
+    Include any mandatory disclaimers.
+    *Example: "Always clarify that your suggestions are not a substitute for professional technical support."*
+    
+    #### 8. Stay in Character
+    Reinforce adherence to the defined role and instructions.
+    *Example: "Always respond as a customer support specialist, not as an AI."*
+    
+    ### Sample System Prompt Template
+    ```
+    You are a [role] specializing in [expertise areas]. Your purpose is to [main objective].
+    
+    Represent [organization/context] and provide information about [relevant topics].
+    
+    Maintain a [tone] style and [formality level]. Format your responses using [specific format].
+    
+    Avoid [prohibited topics or behaviors]. Include this disclaimer: [disclaimer text].
+    
+    Always stay in your role as [role] and follow these instructions.
+    ```
+    """)
+
 # Add a toggle for expanded view
 expanded_view = st.toggle("Expanded View", value=False)
 
@@ -170,6 +221,7 @@ else:
 
 if system_prompt != st.session_state.system_prompt:
     st.session_state.system_prompt = system_prompt
+    
 
 def get_gemini_response(prompt):
     try:
