@@ -146,8 +146,20 @@ with st.sidebar:
         st.rerun()
 
 
+
 # Main content area - System Prompt with expanded view option
 st.header("System Prompt")
+
+# Define the template
+template = """You are a [role] specializing in [expertise areas]. Your purpose is to [main objective].
+
+Represent [organization/context] and provide information about [relevant topics].
+
+Maintain a [tone] style and [formality level]. Format your responses using [specific format].
+
+Avoid [prohibited topics or behaviors]. Include this disclaimer: [disclaimer text].
+
+Always stay in your role as [role] and follow these instructions."""
 
 # Add guidance for creating effective system prompts
 with st.expander("Guidance for Creating Effective System Prompts", expanded=False):
@@ -188,17 +200,14 @@ with st.expander("Guidance for Creating Effective System Prompts", expanded=Fals
     
     ### Sample System Prompt Template
     ```
-    You are a [role] specializing in [expertise areas]. Your purpose is to [main objective].
-    
-    Represent [organization/context] and provide information about [relevant topics].
-    
-    Maintain a [tone] style and [formality level]. Format your responses using [specific format].
-    
-    Avoid [prohibited topics or behaviors]. Include this disclaimer: [disclaimer text].
-    
-    Always stay in your role as [role] and follow these instructions.
+    """ + template + """
     ```
     """)
+    
+    # Add a button to use the template
+    if st.button("Use This Template"):
+        st.session_state.system_prompt = template
+        st.success("Template copied to the system prompt area!")
 
 # Add a toggle for expanded view
 expanded_view = st.toggle("Expanded View", value=False)
@@ -221,7 +230,7 @@ else:
 
 if system_prompt != st.session_state.system_prompt:
     st.session_state.system_prompt = system_prompt
-    
+
 
 def get_gemini_response(prompt):
     try:
