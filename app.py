@@ -345,7 +345,7 @@ def get_gemini_response(prompt):
 
 
 # Chat interface
-st.header("Test Your Bot: " + st.session_state.bot_name)
+st.header("Test Your Bot")
 
 # Display chat messages
 for message in st.session_state.messages:
