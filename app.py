@@ -11,8 +11,25 @@ import utils
 # 1. Page configuration
 st.set_page_config(
     page_title="Chatbot Builder",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'About': "Chatbot Builder powered by Gemini"
+    }
 )
+
+# Apply theme
+st.markdown("""
+    <style>
+    :root {
+        --primary-color: #2563EB;
+        --background-color: #FFFFFF;
+        --secondary-background-color: #F8FAFC;
+        --text-color: #374151;
+        --font: "sans-serif";
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 # Apply balanced spacing CSS
 st.markdown("""
