@@ -14,12 +14,27 @@ st.set_page_config(
     layout="wide"
 )
 
-# 2. Load custom CSS
-try:
-    with open("styles.css") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-except Exception as e:
-    st.error(f"Error loading CSS: {e}")
+# Apply custom CSS directly
+st.markdown("""
+<style>
+/* Reduce spacing between elements */
+h3, .stSubheader {
+    margin-bottom: 0.2rem !important;
+}
+
+/* Make input fields closer to their headers */
+.stTextInput, .stTextArea, .stSelectbox {
+    margin-top: 0.1rem !important;
+    margin-bottom: 0.8rem !important;
+}
+
+/* Caption text closer to elements */
+.stCaption, div[data-testid="caption"] {
+    margin-top: 0 !important;
+    margin-bottom: 0.2rem !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # 3. Load environment variables
 load_dotenv()
