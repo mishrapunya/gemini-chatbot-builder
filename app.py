@@ -181,6 +181,17 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
+    # Add space before footer
+    st.sidebar.markdown("---")  # Horizontal line as separator
+    
+    # Footer with copyright and attribution
+    st.sidebar.markdown("""
+    <div style="text-align: center; color: #718096; font-size: 0.8rem; padding-top: 20px;">
+        © punyamishra 2025 <br>
+        Chatbot builder designed and created by Punya Mishra,<br>with lots of help from Claude and ChatGPT
+    </div>
+    """, unsafe_allow_html=True)
+
 # 7. Main area: Navigation between Bot Builder and Prompt Guidance
 if st.session_state.current_view == "Bot Builder":
     utils.render_bot_builder()
