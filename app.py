@@ -76,7 +76,6 @@ def get_gemini_response(prompt):
     except Exception as e:
         return f"Error: {str(e)}"
 
-
 # Chat interface
 st.header("Test Your Bot")
 
@@ -419,4 +418,4 @@ Remember to remain in character as the world's most frustrating customer support
         system_prompt = st.text_area(
             "Enter instructions for how your bot should behave:",
             height=400,
-            value=st.session_state
+            value=
