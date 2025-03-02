@@ -15,7 +15,7 @@ st.set_page_config(
 load_dotenv()
 
 # 3. Read current 'view' from query params (default = "bot_builder")
-view = st.query_params.get("view", "bot_builder")
+view = st.experimental_get_query_params().get("view", ["bot_builder"])[0]
 
 # 4. Initialize session state variables
 if "messages" not in st.session_state:
@@ -80,13 +80,56 @@ with st.sidebar:
     if temperature != st.session_state.temperature:
         st.session_state.temperature = temperature
 
-    # Toggle link for Prompt Guidance vs. Bot Builder
-    if view == "bot_builder":
-        # Show link to switch to guidance
-        st.markdown("[Prompt Guidance](?view=guidance)")
-    else:
-        # Show link to switch back
-        st.markdown("[Back to Bot Builder](?view=bot_builder)")
+# 7. Main area: Navigation between Bot Builder and Prompt Guidance
+view = st.sidebar.radio("Navigation", ["Bot Builder", "Prompt Guidance"], index=0)
+
+if view == "Bot Builder":
+    #
+    # === BOT BUILDER VIEW ===
+    #
+    
+    # "What is the name of your bot?"
+    st.subheader("What is the name of your bot?")
+    new_bot_name = st.text_input("", value=st.session_state.bot_name)
+    if new_bot_name != st.session_state.bot_name:
+        st.session_state.bot_name = new_bot_name
+
+    # (Rest of the existing bot builder code remains the same)
+    # [Keep all the existing code inside this block exactly as it was]
+
+else:
+    #
+    # === PROMPT GUIDANCE VIEW ===
+    #
+    st.markdown("## System Prompt Creation Guidance")
+    guidance_content = """
+    ### Elements of an Effective System Prompt
+    
+    **1. Role / Persona**  
+    Define the chatbot's identity, expertise, and overall demeanor.
+    
+    **2. Purpose / Objective**  
+    State the chatbot's primary function and intended goals.
+    
+    **3. Context / Background**  
+    Provide any relevant situational or organizational information.
+    
+    **4. Style and Tone Guidelines**  
+    Specify language usage, formality level, and stylistic preferences.
+    
+    **5. Output Format / Structure**  
+    Outline how responses should be organized or formatted.
+    
+    **6. Constraints and Prohibitions**  
+    List topics, behaviors, or actions the bot must avoid.
+    
+    **7. Disclaimers**  
+    Include any mandatory disclaimers.
+    
+    **8. Stay in Character**  
+    Reinforce adherence to the defined role and instructions.
+    """
+    st.markdown(guidance_content)
 
     # Reference Documents
     st.header("Reference Documents")
