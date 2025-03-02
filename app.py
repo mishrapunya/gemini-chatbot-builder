@@ -15,8 +15,11 @@ st.set_page_config(
 )
 
 # 2. Load custom CSS
-with open("styles.css") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+try:
+    with open("styles.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+except Exception as e:
+    st.error(f"Error loading CSS: {e}")
 
 # 3. Load environment variables
 load_dotenv()
