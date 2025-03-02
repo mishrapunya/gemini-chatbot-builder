@@ -135,7 +135,7 @@ with st.sidebar:
         prompt_href = f'<a href="data:text/plain;base64,{prompt_b64}" download="system_prompt.txt">Download system_prompt.txt</a>'
         st.markdown(prompt_href, unsafe_allow_html=True)
 
-        # Sample initial prompts file (empty template)
+        # Custom initial prompts file from user input
         sample_prompts = st.session_state.initial_prompts
         prompts_b64 = base64.b64encode(sample_prompts.encode()).decode()
         prompts_href = f'<a href="data:text/plain;base64,{prompts_b64}" download="initial_prompts.txt">Download initial_prompts.txt</a>'
