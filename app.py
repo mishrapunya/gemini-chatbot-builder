@@ -188,7 +188,7 @@ with st.sidebar:
     st.sidebar.markdown("""
     <div style="text-align: center; color: #718096; font-size: 0.8rem; padding-top: 20px;">
         © punyamishra 2025 <br>
-        Chatbot builder designed and created by Punya Mishra,<br>with lots of help from Claude and ChatGPT
+        Chatbot builder designed and created by Punya Mishra, with lots of help from Claude and ChatGPT
     </div>
     """, unsafe_allow_html=True)
 
