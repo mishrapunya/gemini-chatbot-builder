@@ -14,10 +14,7 @@ st.set_page_config(
 # 2. Load environment variables
 load_dotenv()
 
-# 3. Navigation selection
-view = st.sidebar.radio("Navigation", ["Bot Builder", "Prompt Guidance"], index=0)
-
-# 4. Initialize session state variables
+# 3. Initialize session state variables
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -45,11 +42,11 @@ if "initial_prompts" not in st.session_state:
         "What can you help me with?\nHow does this assistant work?\nTell me about yourself."
     )
 
-# 5. Title & top description in the main area
+# 4. Title & top description in the main area
 st.title("Chatbot Builder")
 st.markdown("Configure and test your Gemini-powered chatbot with this builder interface.")
 
-# 6. Sidebar for configuration
+# 5. Sidebar for configuration
 with st.sidebar:
     st.header("Configuration")
     
