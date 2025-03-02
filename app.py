@@ -259,6 +259,9 @@ selected_template = st.selectbox(
     index=0
 )
 
+# Get previous template selection
+previous_template = st.session_state.previous_template
+
 # Show template parameters and auto-populate based on selection
 if selected_template == "Punny Professor":
     col1, col2 = st.columns(2)
