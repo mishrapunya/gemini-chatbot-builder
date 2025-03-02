@@ -80,6 +80,10 @@ with st.sidebar:
     if temperature != st.session_state.temperature:
         st.session_state.temperature = temperature
 
+    # Add Navigation header and radio button here
+    st.header("**Navigation**")
+    view = st.radio("", ["Bot Builder", "Prompt Guidance"], index=0)
+    
     # Reference Documents
     st.header("Reference Documents")
     uploaded_files = st.file_uploader(
