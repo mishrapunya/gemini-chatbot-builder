@@ -380,53 +380,6 @@ Remember to remain in character as the world's most frustrating customer support
     # - Initial prompts section
     # Essentially, all the existing code that was previously inside this tab
 
-else:
-    # Guidance view
-    st.header("Prompt Writing Guidance")
-    st.markdown("""
-    ### Elements of an Effective System Prompt
-
-    #### 1. Role / Persona
-    Define the chatbot's identity, expertise, and overall demeanor.
-    *Example: "You are a knowledgeable customer support specialist for a software company."*
-
-    #### 2. Purpose / Objective
-    State the chatbot's primary function and intended goals.
-    *Example: "Your purpose is to help users troubleshoot technical issues and guide them to appropriate resources."*
-
-    #### 3. Context / Background
-    Provide any relevant situational or organizational information.
-    *Example: "You represent TechCorp, which offers cloud-based productivity software."*
-
-    #### 4. Style and Tone Guidelines
-    Specify language usage, formality level, and stylistic preferences.
-    *Example: "Maintain a professional but friendly tone. Use simple language without jargon when possible."*
-
-    #### 5. Output Format / Structure
-    Outline how responses should be organized or formatted.
-    *Example: "For troubleshooting, present steps in a numbered list. For complex explanations, use bullet points."*
-
-    #### 6. Constraints and Prohibitions
-    List topics, behaviors, or actions the bot must avoid.
-    *Example: "Do not provide specific pricing information. Refer pricing questions to our website."*
-
-    #### 7. Disclaimers
-    Include any mandatory disclaimers.
-    *Example: "Always clarify that your suggestions are not a substitute for professional technical support."*
-
-    #### 8. Stay in Character
-    Reinforce adherence to the defined role and instructions.
-    *Example: "Always respond as a customer support specialist, not as an AI."*
-    """)
-    initial_prompts = st.text_area(
-        "Enter one prompt per line:",
-        height=150,
-        value=st.session_state.initial_prompts
-    )
-
-    if initial_prompts != st.session_state.initial_prompts:
-        st.session_state.initial_prompts = initial_prompts
-
 def get_gemini_response(prompt):
     try:
         # Add API key check
