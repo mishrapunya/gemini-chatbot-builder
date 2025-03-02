@@ -206,7 +206,7 @@ def render_bot_builder():
     
 def render_chat_interface():
     """Render the chat interface for testing the bot."""
-    st.subheader("Test Your Bot")
+    # Removed the duplicate subheader
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
@@ -220,7 +220,6 @@ def render_chat_interface():
                 response = get_gemini_response(prompt)
                 st.markdown(response)
         st.session_state.messages.append({"role": "assistant", "content": response})
-
 
 def render_prompt_guidance():
     """Render the Prompt Guidance view."""
