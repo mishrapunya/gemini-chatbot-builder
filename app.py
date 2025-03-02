@@ -46,6 +46,9 @@ if "initial_prompts" not in st.session_state:
 if "document_context" not in st.session_state:
     st.session_state.document_context = ""
 
+if "current_view" not in st.session_state:
+    st.session_state.current_view = "Bot Builder"
+
 # 5. Title & top description in the main area
 st.title("Chatbot Builder")
 st.markdown("Configure and test your Gemini-powered chatbot with this builder interface.")
@@ -83,9 +86,23 @@ with st.sidebar:
     if temperature != st.session_state.temperature:
         st.session_state.temperature = temperature
 
-    # Navigation header and selectbox
-    st.header("**Navigation**")
-    view = st.selectbox("", ["Bot Builder", "Prompt Guidance"], index=0, label_visibility="collapsed")
+    # Navigation header and radio buttons that look like links
+    st.header("Navigation")
+    
+    # Create radio buttons with horizontal orientation to look like links
+    view = st.radio(
+        "",
+        ["Bot Builder", "Prompt Guide"],
+        horizontal=True,
+        label_visibility="collapsed",
+        index=0 if st.session_state.current_view == "Bot Builder" else 1
+    )
+    
+    # Update the current view based on selection
+    if view == "Bot Builder":
+        st.session_state.current_view = "Bot Builder"
+    elif view == "Prompt Guide":
+        st.session_state.current_view = "Prompt Guidance"
     
     # Reference Documents
     utils.render_document_uploader()
@@ -99,7 +116,7 @@ with st.sidebar:
         st.rerun()
 
 # 7. Main area: Navigation between Bot Builder and Prompt Guidance
-if view == "Bot Builder":
+if st.session_state.current_view == "Bot Builder":
     utils.render_bot_builder()
 else:
     # Load and display the prompt guidance content from the markdown file
