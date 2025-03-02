@@ -186,7 +186,7 @@ with st.sidebar:
     
     # Footer with copyright, attribution, and link
     st.sidebar.markdown("""
-    <div style="text-align: center; color: #718096; font-size: 0.8rem;">
+    <div style="text-align: left; color: #718096; font-size: 0.8rem;">
         © <a href="https://punyamishra.com" target="_blank" style="color: #2563EB; text-decoration: none;">punyamishra</a> 2025 <br>
         Chatbot builder designed and created by Punya Mishra, with lots of help from Claude and ChatGPT<br><br>
         <span style="font-size: 0.7rem;">Available for use and modification with attribution to the original creator.</span>
