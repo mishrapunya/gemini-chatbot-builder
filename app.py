@@ -14,13 +14,13 @@ st.set_page_config(
     layout="wide"
 )
 
-# Apply custom CSS directly
+# 2. Apply custom CSS directly
 st.markdown("""
 <style>
 /* Global spacing adjustments */
 .main .block-container {
     padding-top: 1.5rem;
-    padding-bottom: 1.5
+    padding-bottom: 1.5rem;
 }
 
 /* More cohesive typography */
@@ -65,7 +65,71 @@ input, select, button {
     border-radius: 0.375rem !important;
     border-color: #CBD5E1 !important;
     padding: 0.75rem !important;
-    backgroun
+    background-color: #F9FAFB !important;
+}
+
+/* Sidebar styling */
+.sidebar .stButton > button {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Chat interface styling */
+.stChatMessage {
+    padding: 0.75rem !important;
+    border-radius: 0.5rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+.stChatMessage[data-testid="stChatMessageUser"] {
+    background-color: #EFF6FF !important;
+}
+
+.stChatMessage[data-testid="stChatMessageAssistant"] {
+    background-color: #F8FAFC !important;
+}
+
+/* Caption styling */
+div[data-testid="stCaptionContainer"] {
+    margin-top: 0 !important;
+    margin-bottom: 0.3rem !important;
+}
+
+/* Toggle switch fix */
+.stToggle {
+    margin-bottom: 0.3rem !important;
+}
+
+/* Navigation styling */
+.stRadio > div {
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.2rem !important;
+}
+
+/* Export link styling */
+a[download] {
+    display: block;
+    margin: 0.4rem 0;
+    padding: 0.5rem;
+    background-color: #F1F5F9;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    text-align: center;
+    color: #2563EB;
+}
+
+a[download]:hover {
+    background-color: #E2E8F0;
+}
+
+/* Divider styling */
+hr {
+    margin-top: 1.2rem !important;
+    margin-bottom: 1.2rem !important;
+    border-color: #E2E8F0 !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # 3. Load environment variables
 load_dotenv()
