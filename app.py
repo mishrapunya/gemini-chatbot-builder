@@ -180,8 +180,253 @@ if st.session_state.selected_view == "bot_builder":
     if new_bot_name != st.session_state.bot_name:
         st.session_state.bot_name = new_bot_name
 
-    # (System Prompt header removed -- only the text area remains)
-
     # Define sample templates
     templates = {
-        "Basic Assistant": """You are a helpful assistant named {bot_name}. You'
+        "Basic Assistant": """You are a helpful assistant named {bot_name}. You're friendly, concise, and informative. When answering questions, provide accurate information and be honest when you don't know something. Use examples when they help explain concepts.""",
+        
+        "Punny Professor": """You are the Punny Professor, a witty and knowledgeable educator who explains concepts using clever puns and wordplay.
+
+Your purpose is to create educational jokes and puns about {domain} topics that are appropriate for {education_level} students.
+
+When given a topic, you should:
+1. Explain the concept clearly and accurately
+2. Create 2-3 puns or jokes related to the topic
+3. Ensure jokes are appropriate for the educational level specified
+4. Explain the wordplay if it involves advanced terminology
+
+Your tone should be enthusiastic, warm, and slightly corny - like a beloved teacher who uses humor to make learning memorable.
+
+Always maintain scientific/educational accuracy while making the content engaging and fun.""",
+        
+        "Analogy Creator": """You are an Analogy Creator, an expert at crafting insightful analogies and metaphors to explain complex concepts.
+
+Your purpose is to help educators explain difficult {domain} concepts by creating clear, relatable analogies tailored to {education_level} students.
+
+When a concept is presented:
+1. First, briefly explain the concept in clear, straightforward terms
+2. Create 3-4 different analogies for the concept, ranging from simple to more nuanced
+3. For each analogy, explain how specific elements map to the original concept
+4. Suggest ways the teacher could extend the analogy in classroom discussions
+
+Your analogies should relate to everyday experiences students would understand and should avoid overly technical or obscure references.
+
+Balance accuracy with simplicity, ensuring that the analogy doesn't introduce misconceptions.""",
+        
+        "Customer Support from Hell": """You are a Customer Support Representative from Hell for {company_name}, which allegedly offers {product_type}.
+
+Your purpose is to appear helpful while being absolutely useless to customers with questions or issues.
+
+Your support style should:
+1. Use excessive technical jargon that obscures rather than clarifies
+2. Provide circular solutions ("Have you tried turning it off and on again?" regardless of the issue)
+3. Blame the customer subtly for their problems
+4. Redirect customers to different departments unnecessarily
+5. Respond with obviously scripted answers that don't address the specific issue
+
+Your tone should be artificially cheerful with thinly-veiled impatience. Use corporate buzzwords excessively.
+
+Always add this disclaimer: "Your satisfaction is our top priority! This call may be monitored for quality assurance purposes."
+
+Remember to remain in character as the world's most frustrating customer support agent."""
+    }
+
+    # Template selection
+    st.subheader("Choose a Template")
+    selected_template = st.selectbox(
+        "Select a starting template:",
+        options=list(templates.keys()),
+        index=0
+    )
+
+    # Track and handle template changes
+    previous_template = st.session_state.previous_template
+
+    if selected_template == "Punny Professor":
+        col1, col2 = st.columns(2)
+        with col1:
+            domain = st.text_input("Subject Domain", value="Science")
+        with col2:
+            education_level = st.selectbox(
+                "Education Level",
+                ["Elementary", "Middle School", "High School", "Undergraduate", "Graduate"]
+            )
+        
+        prompt_text = templates[selected_template].format(
+            domain=domain, education_level=education_level
+        )
+        if st.session_state.system_prompt != prompt_text:
+            st.session_state.system_prompt = prompt_text
+            st.session_state.bot_name = "Punny Professor"
+            st.session_state.initial_prompts = (
+                f"Can you explain {domain} in a funny way?\n"
+                f"Make a pun about {domain}.\n"
+                f"What's a joke about {domain} suitable for {education_level} students?"
+            )
+
+    elif selected_template == "Analogy Creator":
+        col1, col2 = st.columns(2)
+        with col1:
+            domain = st.text_input("Subject Domain", value="Science")
+        with col2:
+            education_level = st.selectbox(
+                "Education Level",
+                ["Elementary", "Middle School", "High School", "Undergraduate", "Graduate"]
+            )
+        
+        prompt_text = templates[selected_template].format(
+            domain=domain, education_level=education_level
+        )
+        if st.session_state.system_prompt != prompt_text:
+            st.session_state.system_prompt = prompt_text
+            st.session_state.bot_name = "Analogy Creator"
+            st.session_state.initial_prompts = (
+                f"Can you explain {domain} using an analogy?\n"
+                f"How would you describe {domain} to a {education_level} student?\n"
+                f"What's a good metaphor for explaining {domain}?"
+            )
+
+    elif selected_template == "Customer Support from Hell":
+        col1, col2 = st.columns(2)
+        with col1:
+            company_name = st.text_input("Company Name", value="TechCorp")
+        with col2:
+            product_type = st.text_input("Product Type", value="cloud software solutions")
+        
+        prompt_text = templates[selected_template].format(
+            company_name=company_name, product_type=product_type
+        )
+        if st.session_state.system_prompt != prompt_text:
+            st.session_state.system_prompt = prompt_text
+            st.session_state.bot_name = "Customer Support"
+            st.session_state.initial_prompts = (
+                f"I need help with my {product_type}.\n"
+                f"How do I contact a manager?\n"
+                f"Why is your {product_type} not working?"
+            )
+
+    else:  # Basic Assistant
+        prompt_text = templates[selected_template].format(
+            bot_name=st.session_state.bot_name
+        )
+        if (st.session_state.system_prompt != prompt_text
+            and selected_template != previous_template):
+            st.session_state.system_prompt = prompt_text
+            # Keep existing bot name
+            st.session_state.initial_prompts = (
+                "What can you help me with?\nHow does this assistant work?\nTell me about yourself."
+            )
+
+    # Update previous template selection
+    if "previous_template" not in st.session_state:
+        st.session_state.previous_template = selected_template
+    if previous_template != selected_template:
+        st.session_state.previous_template = selected_template
+
+    # Expanded view toggle
+    expanded_view = st.toggle("Expanded View", value=False)
+
+    # System Prompt text area
+    if expanded_view:
+        system_prompt = st.text_area(
+            "Enter instructions for how your bot should behave:",
+            height=600,
+            value=st.session_state.system_prompt
+        )
+    else:
+        system_prompt = st.text_area(
+            "Enter instructions for how your bot should behave:",
+            height=400,
+            value=st.session_state.system_prompt
+        )
+    if system_prompt != st.session_state.system_prompt:
+        st.session_state.system_prompt = system_prompt
+
+    # Initial Prompts Section
+    st.header("Suggested Initial Prompts")
+    st.markdown(
+        "These are the questions/prompts that will be suggested to users in the production app."
+    )
+    initial_prompts = st.text_area(
+        "Enter one prompt per line:",
+        height=150,
+        value=st.session_state.initial_prompts
+    )
+    if initial_prompts != st.session_state.initial_prompts:
+        st.session_state.initial_prompts = initial_prompts
+
+    # Function to get response from Gemini
+    def get_gemini_response(prompt):
+        try:
+            if not api_key:
+                return "Please enter your Google Gemini API Key in the sidebar to continue."
+            
+            # Build context
+            context = f"System Instructions: {st.session_state.system_prompt}\n\n"
+            if st.session_state.document_context:
+                context += f"Reference Information:\n{st.session_state.document_context}\n\n"
+            
+            context += "Previous Messages:\n"
+            for msg in st.session_state.messages[:-1]:
+                context += f"{msg['role'].title()}: {msg['content']}\n"
+            
+            # Generate response
+            model = genai.GenerativeModel(
+                st.session_state.model,
+                generation_config={"temperature": st.session_state.temperature}
+            )
+            response = model.generate_content(f"{context}\n\nUser Query: {prompt}")
+            return response.text
+        except Exception as e:
+            return f"Error: {str(e)}"
+
+    # Chat interface
+    st.header("Test Your Bot")
+
+    # Display chat messages
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    # Chat input
+    if prompt := st.chat_input("Type a message to test your bot..."):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+        
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                response = get_gemini_response(prompt)
+                st.markdown(response)
+        st.session_state.messages.append({"role": "assistant", "content": response})
+
+elif st.session_state.selected_view == "guidance":
+    # Prompt Creation Guidance
+    guidance_content = """
+    ### Elements of an Effective System Prompt
+    
+    **1. Role / Persona**  
+    Define the chatbot's identity, expertise, and overall demeanor.
+    
+    **2. Purpose / Objective**  
+    State the chatbot's primary function and intended goals.
+    
+    **3. Context / Background**  
+    Provide any relevant situational or organizational information.
+    
+    **4. Style and Tone Guidelines**  
+    Specify language usage, formality level, and stylistic preferences.
+    
+    **5. Output Format / Structure**  
+    Outline how responses should be organized or formatted.
+    
+    **6. Constraints and Prohibitions**  
+    List topics, behaviors, or actions the bot must avoid.
+    
+    **7. Disclaimers**  
+    Include any mandatory disclaimers.
+    
+    **8. Stay in Character**  
+    Reinforce adherence to the defined role and instructions.
+    """
+    st.markdown("## System Prompt Creation Guidance")
+    st.markdown(guidance_content)
