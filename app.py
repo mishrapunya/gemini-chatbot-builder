@@ -5,17 +5,19 @@ from dotenv import load_dotenv
 import json
 import base64
 
-# Page configuration
+# 1. Page configuration (icon removed)
 st.set_page_config(
-    page_title="Gemini Chatbot Builder",
-    page_icon="🤖",
+    page_title="Chatbot Builder",
     layout="wide"
 )
 
-# Load environment variables
+# 2. Load environment variables
 load_dotenv()
 
-# Initialize session state variables
+# 3. Read current 'view' from query params (default = "bot_builder")
+view = st.experimental_get_query_params().get("view", ["bot_builder"])[0]
+
+# 4. Initialize session state variables
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -43,24 +45,20 @@ if "initial_prompts" not in st.session_state:
         "What can you help me with?\nHow does this assistant work?\nTell me about yourself."
     )
 
-# Track which view is selected
-if "selected_view" not in st.session_state:
-    st.session_state.selected_view = "bot_builder"
-
-# Title and description
-st.title("🤖 Gemini Chatbot Builder")
+# 5. Title & top description in the main area
+st.title("Chatbot Builder")
 st.markdown("Configure and test your Gemini-powered chatbot with this builder interface.")
 
-# Sidebar for configuration
+# 6. Sidebar for configuration
 with st.sidebar:
     st.header("Configuration")
     
-    # API Key input
+    # Google Gemini API Key
     api_key = st.text_input("Google Gemini API Key", type="password")
     if api_key:
         os.environ["GOOGLE_API_KEY"] = api_key
         genai.configure(api_key=api_key)
-    
+
     # Model selection
     model_option = st.selectbox(
         "Select Gemini Model",
@@ -77,34 +75,29 @@ with st.sidebar:
         max_value=1.0,
         value=st.session_state.temperature,
         step=0.1,
-        help="Higher values make output more creative, lower values make it more focused"
+        help="Higher values make output more creative; lower values make it more focused"
     )
     if temperature != st.session_state.temperature:
         st.session_state.temperature = temperature
 
-    # --- Separator & toggle buttons for main view ---
-    st.write("---")
-    col_button1, col_button2 = st.columns(2)
-    with col_button1:
-        if st.button("Bot Builder"):
-            st.session_state.selected_view = "bot_builder"
-    with col_button2:
-        if st.button("Prompt Guidance"):
-            st.session_state.selected_view = "guidance"
-    st.write("---")
+    # Toggle link for Prompt Guidance vs. Bot Builder
+    if view == "bot_builder":
+        # Show link to switch to guidance
+        st.markdown("[Prompt Guidance](?view=guidance)")
+    else:
+        # Show link to switch back
+        st.markdown("[Back to Bot Builder](?view=bot_builder)")
 
-    # Document upload section
+    # Reference Documents
     st.header("Reference Documents")
     uploaded_files = st.file_uploader(
         "Upload documents for context (PDF, DOCX, TXT)",
         accept_multiple_files=True
     )
-    
-    # Initialize document context in session state if not present
+
     if "document_context" not in st.session_state:
         st.session_state.document_context = ""
-    
-    # Process documents button
+
     if uploaded_files and st.button("Process Documents"):
         document_text = ""
         for file in uploaded_files:
@@ -119,13 +112,13 @@ with st.sidebar:
                     doc = docx.Document(file)
                     for para in doc.paragraphs:
                         document_text += para.text + "\n"
-                else:  # Assume text file
+                else:  # assume text file
                     document_text += file.getvalue().decode("utf-8") + "\n"
-                
+
                 document_text += f"\n--- End of {file.name} ---\n\n"
             except Exception as e:
                 st.error(f"Error processing {file.name}: {e}")
-        
+
         st.session_state.document_context = document_text
         st.success(f"Processed {len(uploaded_files)} document(s)")
 
@@ -133,54 +126,50 @@ with st.sidebar:
     st.header("Export Configuration")
     
     if st.button("Export Settings"):
-        # Create settings dictionary
         settings = {
             "bot_name": st.session_state.bot_name,
             "temperature": st.session_state.temperature,
             "model": st.session_state.model
         }
-        
-        # Convert settings to JSON
         settings_json = json.dumps(settings, indent=2)
-        
-        # Create downloadable links
+
         st.markdown("### Download Configuration Files")
         
-        # Settings JSON file
+        # settings.json
         settings_b64 = base64.b64encode(settings_json.encode()).decode()
         settings_href = f'<a href="data:application/json;base64,{settings_b64}" download="settings.json">Download settings.json</a>'
         st.markdown(settings_href, unsafe_allow_html=True)
         
-        # System prompt file
+        # system_prompt.txt
         prompt_b64 = base64.b64encode(st.session_state.system_prompt.encode()).decode()
         prompt_href = f'<a href="data:text/plain;base64,{prompt_b64}" download="system_prompt.txt">Download system_prompt.txt</a>'
         st.markdown(prompt_href, unsafe_allow_html=True)
 
-        # Custom initial prompts file
+        # initial_prompts.txt
         sample_prompts = st.session_state.initial_prompts
         prompts_b64 = base64.b64encode(sample_prompts.encode()).decode()
         prompts_href = f'<a href="data:text/plain;base64,{prompts_b64}" download="initial_prompts.txt">Download initial_prompts.txt</a>'
         st.markdown(prompts_href, unsafe_allow_html=True)
-    
-    # Reset chat button
+
+    # Reset chat
     if st.button("Reset Chat"):
         st.session_state.messages = []
         st.rerun()
 
-# -----------------------
-# Main Area: Conditional Views
-# -----------------------
-
-if st.session_state.selected_view == "bot_builder":
-    # Bot Builder Content
-
-    # Bot Name
-    st.header("Bot Configuration")
-    new_bot_name = st.text_input("Bot Name", value=st.session_state.bot_name)
+# 7. Main area: Conditional logic based on 'view' param
+if view == "bot_builder":
+    #
+    # === BOT BUILDER VIEW ===
+    #
+    
+    # "What is the name of your bot?"
+    st.subheader("What is the name of your bot?")
+    new_bot_name = st.text_input("", value=st.session_state.bot_name)
     if new_bot_name != st.session_state.bot_name:
         st.session_state.bot_name = new_bot_name
 
-    # Define sample templates
+    # Choose a Template
+    st.subheader("Choose a Template")
     templates = {
         "Basic Assistant": """You are a helpful assistant named {bot_name}. You're friendly, concise, and informative. When answering questions, provide accurate information and be honest when you don't know something. Use examples when they help explain concepts.""",
         
@@ -230,15 +219,13 @@ Always add this disclaimer: "Your satisfaction is our top priority! This call ma
 Remember to remain in character as the world's most frustrating customer support agent."""
     }
 
-    # Template selection
-    st.subheader("Choose a Template")
     selected_template = st.selectbox(
-        "Select a starting template:",
+        "",
         options=list(templates.keys()),
         index=0
     )
 
-    # Track and handle template changes
+    # Auto-populate system prompt based on template
     previous_template = st.session_state.previous_template
 
     if selected_template == "Punny Professor":
@@ -311,41 +298,40 @@ Remember to remain in character as the world's most frustrating customer support
         if (st.session_state.system_prompt != prompt_text
             and selected_template != previous_template):
             st.session_state.system_prompt = prompt_text
-            # Keep existing bot name
             st.session_state.initial_prompts = (
                 "What can you help me with?\nHow does this assistant work?\nTell me about yourself."
             )
 
-    # Update previous template selection
+    # Store template selection
     if "previous_template" not in st.session_state:
         st.session_state.previous_template = selected_template
     if previous_template != selected_template:
         st.session_state.previous_template = selected_template
 
-    # Expanded view toggle
+    # Set your System Prompt
+    st.subheader("Set your System Prompt")
+    st.caption("if you need help choose Prompt Guidance from the left menu")
+
     expanded_view = st.toggle("Expanded View", value=False)
 
-    # System Prompt text area
+    # Make the text area smaller by default (height=200)
     if expanded_view:
         system_prompt = st.text_area(
-            "Enter instructions for how your bot should behave:",
+            "",
             height=600,
             value=st.session_state.system_prompt
         )
     else:
         system_prompt = st.text_area(
-            "Enter instructions for how your bot should behave:",
-            height=400,
+            "",
+            height=200,
             value=st.session_state.system_prompt
         )
     if system_prompt != st.session_state.system_prompt:
         st.session_state.system_prompt = system_prompt
 
-    # Initial Prompts Section
-    st.header("Suggested Initial Prompts")
-    st.markdown(
-        "These are the questions/prompts that will be suggested to users in the production app."
-    )
+    # Suggested Initial Prompts
+    st.subheader("Suggested Initial Prompts")
     initial_prompts = st.text_area(
         "Enter one prompt per line:",
         height=150,
@@ -354,22 +340,19 @@ Remember to remain in character as the world's most frustrating customer support
     if initial_prompts != st.session_state.initial_prompts:
         st.session_state.initial_prompts = initial_prompts
 
-    # Function to get response from Gemini
+    # Function to get Gemini response
     def get_gemini_response(prompt):
         try:
             if not api_key:
                 return "Please enter your Google Gemini API Key in the sidebar to continue."
             
-            # Build context
             context = f"System Instructions: {st.session_state.system_prompt}\n\n"
             if st.session_state.document_context:
                 context += f"Reference Information:\n{st.session_state.document_context}\n\n"
-            
             context += "Previous Messages:\n"
             for msg in st.session_state.messages[:-1]:
                 context += f"{msg['role'].title()}: {msg['content']}\n"
             
-            # Generate response
             model = genai.GenerativeModel(
                 st.session_state.model,
                 generation_config={"temperature": st.session_state.temperature}
@@ -380,27 +363,26 @@ Remember to remain in character as the world's most frustrating customer support
             return f"Error: {str(e)}"
 
     # Chat interface
-    st.header("Test Your Bot")
-
-    # Display chat messages
+    st.subheader("Test Your Bot")
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    # Chat input
     if prompt := st.chat_input("Type a message to test your bot..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
-        
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 response = get_gemini_response(prompt)
                 st.markdown(response)
         st.session_state.messages.append({"role": "assistant", "content": response})
 
-elif st.session_state.selected_view == "guidance":
-    # Prompt Creation Guidance
+else:
+    #
+    # === PROMPT GUIDANCE VIEW ===
+    #
+    st.markdown("## System Prompt Creation Guidance")
     guidance_content = """
     ### Elements of an Effective System Prompt
     
@@ -428,5 +410,4 @@ elif st.session_state.selected_view == "guidance":
     **8. Stay in Character**  
     Reinforce adherence to the defined role and instructions.
     """
-    st.markdown("## System Prompt Creation Guidance")
     st.markdown(guidance_content)
