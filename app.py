@@ -48,7 +48,7 @@ st.markdown("Configure and test your Gemini-powered chatbot with this builder in
 
 # 5. Sidebar for configuration
 with st.sidebar:
-    st.header("Configuration")
+    st.header("ChatBot Configuration")
     
     # Google Gemini API Key
     api_key = st.text_input("Google Gemini API Key", type="password")
