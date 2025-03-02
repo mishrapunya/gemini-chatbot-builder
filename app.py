@@ -22,6 +22,9 @@ if "messages" not in st.session_state:
 if "bot_name" not in st.session_state:
     st.session_state.bot_name = "Gemini Assistant"
 
+if "previous_template" not in st.session_state:
+    st.session_state.previous_template = "Basic Assistant"
+    
 if "system_prompt" not in st.session_state:
     st.session_state.system_prompt = "You are a helpful assistant named Gemini Assistant. You're friendly, concise, and informative. When answering questions, provide accurate information and be honest when you don't know something."
 
@@ -256,7 +259,7 @@ selected_template = st.selectbox(
     index=0
 )
 
-# Show template parameters based on selection
+# Show template parameters and auto-populate based on selection
 if selected_template == "Punny Professor":
     col1, col2 = st.columns(2)
     with col1:
@@ -264,9 +267,12 @@ if selected_template == "Punny Professor":
     with col2:
         education_level = st.selectbox("Education Level", ["Elementary", "Middle School", "High School", "Undergraduate", "Graduate"])
     
-    if st.button("Use This Template"):
-        st.session_state.system_prompt = templates[selected_template].format(domain=domain, education_level=education_level)
-        st.success(f"{selected_template} template copied to system prompt!")
+    # Auto-populate when parameters change
+    prompt_text = templates[selected_template].format(domain=domain, education_level=education_level)
+    if st.session_state.system_prompt != prompt_text:
+        st.session_state.system_prompt = prompt_text
+        st.session_state.bot_name = "Punny Professor"
+        st.session_state.initial_prompts = f"Can you explain {domain} in a funny way?\nMake a pun about {domain}.\nWhat's a joke about {domain} suitable for {education_level} students?"
 
 elif selected_template == "Analogy Creator":
     col1, col2 = st.columns(2)
@@ -275,9 +281,12 @@ elif selected_template == "Analogy Creator":
     with col2:
         education_level = st.selectbox("Education Level", ["Elementary", "Middle School", "High School", "Undergraduate", "Graduate"])
     
-    if st.button("Use This Template"):
-        st.session_state.system_prompt = templates[selected_template].format(domain=domain, education_level=education_level)
-        st.success(f"{selected_template} template copied to system prompt!")
+    # Auto-populate when parameters change
+    prompt_text = templates[selected_template].format(domain=domain, education_level=education_level)
+    if st.session_state.system_prompt != prompt_text:
+        st.session_state.system_prompt = prompt_text
+        st.session_state.bot_name = "Analogy Creator"
+        st.session_state.initial_prompts = f"Can you explain {domain} using an analogy?\nHow would you describe {domain} to a {education_level} student?\nWhat's a good metaphor for explaining {domain}?"
 
 elif selected_template == "Customer Support from Hell":
     col1, col2 = st.columns(2)
@@ -286,14 +295,28 @@ elif selected_template == "Customer Support from Hell":
     with col2:
         product_type = st.text_input("Product Type", value="cloud software solutions")
     
-    if st.button("Use This Template"):
-        st.session_state.system_prompt = templates[selected_template].format(company_name=company_name, product_type=product_type)
-        st.success(f"{selected_template} template copied to system prompt!")
+    # Auto-populate when parameters change
+    prompt_text = templates[selected_template].format(company_name=company_name, product_type=product_type)
+    if st.session_state.system_prompt != prompt_text:
+        st.session_state.system_prompt = prompt_text
+        st.session_state.bot_name = "Customer Support"
+        st.session_state.initial_prompts = f"I need help with my {product_type}.\nHow do I contact a manager?\nWhy is your {product_type} not working?"
 
 else:  # Basic Assistant
-    if st.button("Use This Template"):
-        st.session_state.system_prompt = templates[selected_template].format(bot_name=st.session_state.bot_name)
-        st.success(f"{selected_template} template copied to system prompt!")
+    # Auto-populate
+    prompt_text = templates[selected_template].format(bot_name=st.session_state.bot_name)
+    if st.session_state.system_prompt != prompt_text and selected_template != previous_template:
+        st.session_state.system_prompt = prompt_text
+        # Keep existing bot name
+        st.session_state.initial_prompts = "What can you help me with?\nHow does this assistant work?\nTell me about yourself."
+
+# Store the previous template selection
+if "previous_template" not in st.session_state:
+    st.session_state.previous_template = selected_template
+previous_template = st.session_state.previous_template
+if previous_template != selected_template:
+    st.session_state.previous_template = selected_template
+
 
 # Expanded view toggle
 st.subheader("System Prompt")
