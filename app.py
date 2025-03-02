@@ -35,6 +35,16 @@ if new_bot_name != st.session_state.bot_name:
 st.subheader("Set Your System Prompt (or choose a template)")
 templates = {...} # Same template definitions as before
 
+templates = {
+    "Basic Assistant": """You are a helpful assistant named {bot_name}. You're friendly, concise, and informative. When answering questions, provide accurate information and be honest when you don't know something. Use examples when they help explain concepts.""",
+    
+    "Punny Professor": """You are the Punny Professor, a witty and knowledgeable educator who explains concepts using clever puns and wordplay....""",
+    
+    "Analogy Creator": """You are an Analogy Creator, an expert at crafting insightful analogies and metaphors to explain complex concepts....""",
+    
+    "Customer Support from Hell": """You are a Customer Support Representative from Hell for {company_name}, which allegedly offers {product_type}...."""
+}
+
 selected_template = st.selectbox("", options=list(templates.keys()), index=0)
 
 # Auto-populate system prompt and bot name based on template
