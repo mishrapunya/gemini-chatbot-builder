@@ -208,9 +208,9 @@ Remember to remain in character as the world's most frustrating customer support
 # Set default template for display
 template = templates["Basic Assistant"]
 
-# Add guidance for creating effective system prompts
-with st.expander("Guidance for Creating Effective System Prompts", expanded=False):
-    st.markdown("""
+# Add a button to show guidance in a popup
+if st.button("Show Guidance for Creating Effective System Prompts"):
+    guidance_content = """
     ### Elements of an Effective System Prompt
     
     #### 1. Role / Persona
@@ -244,12 +244,11 @@ with st.expander("Guidance for Creating Effective System Prompts", expanded=Fals
     #### 8. Stay in Character
     Reinforce adherence to the defined role and instructions.
     *Example: "Always respond as a customer support specialist, not as an AI."*
+    """
     
-    ### Sample System Prompt Template
-    ```
-    """ + template + """
-    ```
-    """)
+    # Show popup with guidance
+    st.info("Close this popup by clicking the X in the top-right corner")
+    st.markdown(guidance_content)
 
 # Template selection section
 st.subheader("Choose a Template")
