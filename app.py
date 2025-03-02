@@ -17,129 +17,13 @@ st.set_page_config(
 # Apply custom CSS directly
 st.markdown("""
 <style>
-/* Global spacing adjustments */
-.main .block-container {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+/* Test CSS with obvious color changes */
+h1, h2, h3, .stSubheader {
+    color: #FF0000 !important; /* Bright red */
+    font-weight: bold !important;
 }
 
-/* More cohesive typography */
-p, div, span {
-    color: #374151;
-}
-
-/* Header styling with better colors and reduced spacing */
-h1 {
-    color: #1E40AF;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-h2 {
-    color: #1E3A8A;
-    font-size: 1.7rem;
-    margin-top: 1rem;
-    margin-bottom: 0.4rem;
-}
-
-h3, .stSubheader {
-    color: #2563EB;
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-top: 0.8rem;
-    margin-bottom: 0.3rem;
-}
-
-/* Reduce spacing between elements */
-.stTextInput, .stTextArea, .stSelectbox {
-    margin-top: 0.2rem !important;
-    margin-bottom: 0.6rem !important;
-}
-
-/* Form element styling */
-input, select, button {
-    border-radius: 0.375rem !important;
-}
-
-.stTextArea textarea {
-    border-radius: 0.375rem !important;
-    border-color: #CBD5E1 !important;
-    padding: 0.75rem !important;
-    background-color: #F9FAFB !important;
-}
-
-/* Sidebar styling */
-.sidebar .stButton > button {
-    width: 100%;
-    margin-top: 0.5rem;
-}
-
-/* Chat interface styling */
-.stChatMessage {
-    padding: 0.75rem !important;
-    border-radius: 0.5rem !important;
-    margin-bottom: 0.75rem !important;
-}
-
-.stChatMessage[data-testid="stChatMessageUser"] {
-    background-color: #EFF6FF !important;
-}
-
-.stChatMessage[data-testid="stChatMessageAssistant"] {
-    background-color: #F8FAFC !important;
-}
-
-/* Caption styling */
-.css-1vencpc, .css-pxxe24 {
-    margin-top: 0 !important;
-    margin-bottom: 0.3rem !important;
-}
-
-/* Toggle switch fix */
-.stToggle {
-    margin-bottom: 0.3rem !important;
-}
-
-/* Navigation styling */
-.stRadio > div {
-    margin-top: 0.2rem !important;
-    margin-bottom: 0.2rem !important;
-}
-
-/* Export link styling */
-a[download] {
-    display: block;
-    margin: 0.4rem 0;
-    padding: 0.5rem;
-    background-color: #F1F5F9;
-    border-radius: 0.375rem;
-    text-decoration: none;
-    text-align: center;
-    color: #2563EB;
-}
-
-a[download]:hover {
-    background-color: #E2E8F0;
-}
-
-/* Divider styling */
-hr {
-    margin-top: 1.2rem !important;
-    margin-bottom: 1.2rem !important;
-    border-color: #E2E8F0 !important;
-}
-
-/* Tooltip styling */
-div[data-baseweb="tooltip"] {
-    background-color: #334155 !important;
-    border-radius: 0.25rem !important;
-}
-
-/* Prompt field styling */
-div[data-testid="stForm"] {
-    border: none !important;
-    padding: 0 !important;
-}
+/* The rest of your CSS can remain as is */
 </style>
 """, unsafe_allow_html=True)
 
