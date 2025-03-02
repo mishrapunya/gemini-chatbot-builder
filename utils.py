@@ -121,88 +121,47 @@ def render_bot_builder():
     # Check if template has changed and needs immediate update
     template_changed = selected_template != st.session_state.previous_template
     
-    # Template-specific fields
-    if selected_template == "Punny Professor":
-        col1, col2 = st.columns(2)
-        with col1:
-            domain = st.text_input("Subject Domain", value="Science")
-        with col2:
-            education_level = st.selectbox(
-                "Education Level",
-                ["Elementary", "Middle School", "High School", "Undergraduate", "Graduate"]
-            )
-        
-        prompt_text = templates.get_template_text(selected_template, domain=domain, education_level=education_level)
-        
-        # Update immediately if template changed
-        if template_changed:
+    # Handle all templates in a simplified way
+    if template_changed:
+        if selected_template == "Punny Professor":
+            # Set default values without showing extra inputs
+            domain = "Science"
+            education_level = "High School"
+            prompt_text = templates.get_template_text(selected_template, domain=domain, education_level=education_level)
             st.session_state.bot_name = "Punny Professor"
-            st.session_state.system_prompt = prompt_text
             st.session_state.initial_prompts = templates.get_default_initial_prompts(
                 selected_template, domain=domain, education_level=education_level
             )
-            st.session_state.previous_template = selected_template
-            st.rerun()
-        elif st.session_state.system_prompt != prompt_text:
-            st.session_state.system_prompt = prompt_text
-
-    elif selected_template == "Analogy Creator":
-        col1, col2 = st.columns(2)
-        with col1:
-            domain = st.text_input("Subject Domain", value="Science")
-        with col2:
-            education_level = st.selectbox(
-                "Education Level",
-                ["Elementary", "Middle School", "High School", "Undergraduate", "Graduate"]
-            )
-        
-        prompt_text = templates.get_template_text(selected_template, domain=domain, education_level=education_level)
-        
-        # Update immediately if template changed
-        if template_changed:
+            
+        elif selected_template == "Analogy Creator":
+            # Set default values without showing extra inputs
+            domain = "Science"
+            education_level = "High School"
+            prompt_text = templates.get_template_text(selected_template, domain=domain, education_level=education_level)
             st.session_state.bot_name = "Analogy Creator"
-            st.session_state.system_prompt = prompt_text
             st.session_state.initial_prompts = templates.get_default_initial_prompts(
                 selected_template, domain=domain, education_level=education_level
             )
-            st.session_state.previous_template = selected_template
-            st.rerun()
-        elif st.session_state.system_prompt != prompt_text:
-            st.session_state.system_prompt = prompt_text
-
-    elif selected_template == "Customer Support from Hell":
-        col1, col2 = st.columns(2)
-        with col1:
-            company_name = st.text_input("Company Name", value="TechCorp")
-        with col2:
-            product_type = st.text_input("Product Type", value="cloud software solutions")
-        
-        prompt_text = templates.get_template_text(selected_template, company_name=company_name, product_type=product_type)
-        
-        # Update immediately if template changed
-        if template_changed:
+            
+        elif selected_template == "Customer Support from Hell":
+            # Set default values without showing extra inputs
+            company_name = "TechCorp"
+            product_type = "cloud software solutions"
+            prompt_text = templates.get_template_text(selected_template, company_name=company_name, product_type=product_type)
             st.session_state.bot_name = "Customer Support"
-            st.session_state.system_prompt = prompt_text
             st.session_state.initial_prompts = templates.get_default_initial_prompts(
                 selected_template, product_type=product_type
             )
-            st.session_state.previous_template = selected_template
-            st.rerun()
-        elif st.session_state.system_prompt != prompt_text:
-            st.session_state.system_prompt = prompt_text
-
-    else:  # Basic Assistant
-        prompt_text = templates.get_template_text(selected_template, bot_name=st.session_state.bot_name)
-        
-        # Update immediately if template changed
-        if template_changed:
-            st.session_state.system_prompt = prompt_text
+            
+        else:  # Basic Assistant
+            prompt_text = templates.get_template_text(selected_template, bot_name=st.session_state.bot_name)
             st.session_state.initial_prompts = templates.get_default_initial_prompts(selected_template)
-            st.session_state.previous_template = selected_template
-            # For Basic Assistant, we don't change the bot name, as it should be customizable
-            st.rerun()
-        elif st.session_state.system_prompt != prompt_text and template_changed:
-            st.session_state.system_prompt = prompt_text
+            # For Basic Assistant, we keep the current bot name
+        
+        # Update the system prompt and template state
+        st.session_state.system_prompt = prompt_text
+        st.session_state.previous_template = selected_template
+        st.rerun()
 
     # This section is still needed but won't get executed after a st.rerun()
     if st.session_state.previous_template != selected_template:
@@ -244,6 +203,7 @@ def render_bot_builder():
     st.caption("Try out your bot configuration with sample queries")
     st.markdown("---")
     render_chat_interface()
+    
 def render_chat_interface():
     """Render the chat interface for testing the bot."""
     st.subheader("Test Your Bot")
