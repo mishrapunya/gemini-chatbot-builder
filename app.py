@@ -378,9 +378,8 @@ else:
     #
     # === PROMPT GUIDANCE VIEW ===
     #
-    st.markdown("## System Prompt Creation Guidance")
+    st.markdown("## Elements of an Effective System Prompt")
     guidance_content = """
-    ### Elements of an Effective System Prompt
     
     **1. Role / Persona**  
     Define the chatbot's identity, expertise, and overall demeanor.
