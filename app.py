@@ -20,7 +20,7 @@ st.markdown("""
 /* Global spacing adjustments */
 .main .block-container {
     padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-bottom: 1.5
 }
 
 /* More cohesive typography */
