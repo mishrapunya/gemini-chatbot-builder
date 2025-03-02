@@ -31,6 +31,9 @@ if "temperature" not in st.session_state:
 if "model" not in st.session_state:
     st.session_state.model = "gemini-1.5-pro"
 
+if "initial_prompts" not in st.session_state:
+    st.session_state.initial_prompts = "What can you help me with?\nHow does this assistant work?\nTell me about yourself."
+
 # Title and description
 st.title("🤖 Gemini Chatbot Builder")
 st.markdown("Configure and test your Gemini-powered chatbot with this builder interface.")
@@ -44,12 +47,6 @@ with st.sidebar:
     if api_key:
         os.environ["GOOGLE_API_KEY"] = api_key
         genai.configure(api_key=api_key)
-    
-    # Bot name
-    new_bot_name = st.text_input("Bot Name", value=st.session_state.bot_name)
-    if new_bot_name != st.session_state.bot_name:
-        st.session_state.bot_name = new_bot_name
-        st.experimental_rerun()  # Force a complete rerun to update all UI elements
     
     # Model selection
     model_option = st.selectbox(
@@ -146,7 +143,11 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
-
+# Bot Name in main panel
+st.header("Bot Configuration")
+new_bot_name = st.text_input("Bot Name", value=st.session_state.bot_name)
+if new_bot_name != st.session_state.bot_name:
+    st.session_state.bot_name = new_bot_name
 
 # Main content area - System Prompt with expanded view option
 st.header("System Prompt")
@@ -315,6 +316,19 @@ else:
 
 if system_prompt != st.session_state.system_prompt:
     st.session_state.system_prompt = system_prompt
+
+# Initial Prompts Section
+st.header("Suggested Initial Prompts")
+st.markdown("These are the questions/prompts that will be suggested to users in the production app.")
+
+initial_prompts = st.text_area(
+    "Enter one prompt per line:",
+    height=150,
+    value=st.session_state.initial_prompts
+)
+
+if initial_prompts != st.session_state.initial_prompts:
+    st.session_state.initial_prompts = initial_prompts
 
 def get_gemini_response(prompt):
     try:
