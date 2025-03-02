@@ -120,3 +120,150 @@ def render_bot_builder():
     previous_template = st.session_state.previous_template
 
     if selected_template == "Punny Professor":
+        col1, col2 = st.columns(2)
+        with col1:
+            domain = st.text_input("Subject Domain", value="Science")
+        with col2:
+            education_level = st.selectbox(
+                "Education Level",
+                ["Elementary", "Middle School", "High School", "Undergraduate", "Graduate"]
+            )
+        
+        prompt_text = templates.get_template_text(selected_template, domain=domain, education_level=education_level)
+        if st.session_state.system_prompt != prompt_text:
+            st.session_state.system_prompt = prompt_text
+            st.session_state.bot_name = "Punny Professor"
+            st.session_state.initial_prompts = templates.get_default_initial_prompts(
+                selected_template, domain=domain, education_level=education_level
+            )
+
+    elif selected_template == "Analogy Creator":
+        col1, col2 = st.columns(2)
+        with col1:
+            domain = st.text_input("Subject Domain", value="Science")
+        with col2:
+            education_level = st.selectbox(
+                "Education Level",
+                ["Elementary", "Middle School", "High School", "Undergraduate", "Graduate"]
+            )
+        
+        prompt_text = templates.get_template_text(selected_template, domain=domain, education_level=education_level)
+        if st.session_state.system_prompt != prompt_text:
+            st.session_state.system_prompt = prompt_text
+            st.session_state.bot_name = "Analogy Creator"
+            st.session_state.initial_prompts = templates.get_default_initial_prompts(
+                selected_template, domain=domain, education_level=education_level
+            )
+
+    elif selected_template == "Customer Support from Hell":
+        col1, col2 = st.columns(2)
+        with col1:
+            company_name = st.text_input("Company Name", value="TechCorp")
+        with col2:
+            product_type = st.text_input("Product Type", value="cloud software solutions")
+        
+        prompt_text = templates.get_template_text(selected_template, company_name=company_name, product_type=product_type)
+        if st.session_state.system_prompt != prompt_text:
+            st.session_state.system_prompt = prompt_text
+            st.session_state.bot_name = "Customer Support"
+            st.session_state.initial_prompts = templates.get_default_initial_prompts(
+                selected_template, product_type=product_type
+            )
+
+    else:  # Basic Assistant
+        prompt_text = templates.get_template_text(selected_template, bot_name=st.session_state.bot_name)
+        if (st.session_state.system_prompt != prompt_text
+            and selected_template != previous_template):
+            st.session_state.system_prompt = prompt_text
+            st.session_state.initial_prompts = templates.get_default_initial_prompts(selected_template)
+
+    # Store template selection
+    if "previous_template" not in st.session_state:
+        st.session_state.previous_template = selected_template
+    if previous_template != selected_template:
+        st.session_state.previous_template = selected_template
+
+    # Set your System Prompt
+    st.subheader("Set your System Prompt")
+    st.caption("if you need help choose Prompt Guidance from the left menu")
+
+    expanded_view = st.toggle("Expanded View", value=False)
+
+    # Make the text area smaller by default (height=200)
+    if expanded_view:
+        system_prompt = st.text_area(
+            "",
+            height=600,
+            value=st.session_state.system_prompt
+        )
+    else:
+        system_prompt = st.text_area(
+            "",
+            height=200,
+            value=st.session_state.system_prompt
+        )
+    if system_prompt != st.session_state.system_prompt:
+        st.session_state.system_prompt = system_prompt
+
+    # Suggested Initial Prompts
+    st.subheader("Suggested Initial Prompts")
+    initial_prompts = st.text_area(
+        "Enter one prompt per line:",
+        height=150,
+        value=st.session_state.initial_prompts
+    )
+    if initial_prompts != st.session_state.initial_prompts:
+        st.session_state.initial_prompts = initial_prompts
+
+    # Chat interface
+    render_chat_interface()
+
+
+def render_chat_interface():
+    """Render the chat interface for testing the bot."""
+    st.subheader("Test Your Bot")
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    if prompt := st.chat_input("Type a message to test your bot..."):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                response = get_gemini_response(prompt)
+                st.markdown(response)
+        st.session_state.messages.append({"role": "assistant", "content": response})
+
+
+def render_prompt_guidance():
+    """Render the Prompt Guidance view."""
+    st.markdown("## Elements of an Effective System Prompt")
+    guidance_content = """
+    
+    **1. Role / Persona**  
+    Define the chatbot's identity, expertise, and overall demeanor.
+    
+    **2. Purpose / Objective**  
+    State the chatbot's primary function and intended goals.
+    
+    **3. Context / Background**  
+    Provide any relevant situational or organizational information.
+    
+    **4. Style and Tone Guidelines**  
+    Specify language usage, formality level, and stylistic preferences.
+    
+    **5. Output Format / Structure**  
+    Outline how responses should be organized or formatted.
+    
+    **6. Constraints and Prohibitions**  
+    List topics, behaviors, or actions the bot must avoid.
+    
+    **7. Disclaimers**  
+    Include any mandatory disclaimers.
+    
+    **8. Stay in Character**  
+    Reinforce adherence to the defined role and instructions.
+    """
+    st.markdown(guidance_content)
