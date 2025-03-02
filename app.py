@@ -17,16 +17,55 @@ st.set_page_config(
 # Apply custom CSS directly
 st.markdown("""
 <style>
-/* Test CSS with obvious color changes */
-h1, h2, h3, .stSubheader {
-    color: #FF0000 !important; /* Bright red */
-    font-weight: bold !important;
+/* Global spacing adjustments */
+.main .block-container {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
 }
 
-/* The rest of your CSS can remain as is */
-</style>
-""", unsafe_allow_html=True)
+/* More cohesive typography */
+p, div, span {
+    color: #374151;
+}
 
+/* Header styling with better colors and reduced spacing */
+h1 {
+    color: #1E40AF;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    color: #1E3A8A;
+    font-size: 1.7rem;
+    margin-top: 1rem;
+    margin-bottom: 0.4rem;
+}
+
+h3, .stSubheader {
+    color: #2563EB;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 0.8rem;
+    margin-bottom: 0.3rem;
+}
+
+/* Reduce spacing between elements */
+.stTextInput, .stTextArea, .stSelectbox {
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.6rem !important;
+}
+
+/* Form element styling */
+input, select, button {
+    border-radius: 0.375rem !important;
+}
+
+.stTextArea textarea {
+    border-radius: 0.375rem !important;
+    border-color: #CBD5E1 !important;
+    padding: 0.75rem !important;
+    backgroun
 
 # 3. Load environment variables
 load_dotenv()
