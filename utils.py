@@ -100,25 +100,25 @@ def render_export_section():
 
 
 def render_bot_builder():
-    """Render the Bot Builder view."""
-    # "What is the name of your bot?"
-    st.subheader("What is the name of your bot?")
+    """Render the Bot Builder view with improved layout."""
+    # 1. "Give a name to your Bot" section
+    st.subheader("Give a name to your Bot")
     new_bot_name = st.text_input("", value=st.session_state.bot_name)
     if new_bot_name != st.session_state.bot_name:
         st.session_state.bot_name = new_bot_name
-
-    # Choose a Template
-    st.subheader("Choose a Template")
+        
+    # 2. "Set Your System Prompt (or choose a template)" section
+    st.subheader("Set Your System Prompt (or choose a template)")
+    
+    # Template selection
     template_names = templates.get_template_names()
     selected_template = st.selectbox(
-        "",
+        "Choose a template:",
         options=template_names,
         index=template_names.index("Basic Assistant") if "Basic Assistant" in template_names else 0
     )
 
-    # Auto-populate system prompt based on template
-    previous_template = st.session_state.previous_template
-
+    # Template-specific fields
     if selected_template == "Punny Professor":
         col1, col2 = st.columns(2)
         with col1:
@@ -173,23 +173,19 @@ def render_bot_builder():
     else:  # Basic Assistant
         prompt_text = templates.get_template_text(selected_template, bot_name=st.session_state.bot_name)
         if (st.session_state.system_prompt != prompt_text
-            and selected_template != previous_template):
+            and selected_template != st.session_state.previous_template):
             st.session_state.system_prompt = prompt_text
             st.session_state.initial_prompts = templates.get_default_initial_prompts(selected_template)
 
     # Store template selection
-    if "previous_template" not in st.session_state:
-        st.session_state.previous_template = selected_template
-    if previous_template != selected_template:
+    if st.session_state.previous_template != selected_template:
         st.session_state.previous_template = selected_template
 
-    # Set your System Prompt
-    st.subheader("Set your System Prompt")
-    st.caption("if you need help choose Prompt Guidance from the left menu")
-
+    # 3. Expanded View toggle
     expanded_view = st.toggle("Expanded View", value=False)
+    st.caption("Edit your system prompt below:")
 
-    # Make the text area smaller by default (height=200)
+    # 4. System Prompt text area
     if expanded_view:
         system_prompt = st.text_area(
             "",
@@ -205,8 +201,9 @@ def render_bot_builder():
     if system_prompt != st.session_state.system_prompt:
         st.session_state.system_prompt = system_prompt
 
-    # Suggested Initial Prompts
+    # 5. Suggested Initial Prompts
     st.subheader("Suggested Initial Prompts")
+    st.caption("These prompts will help users understand how to interact with your bot")
     initial_prompts = st.text_area(
         "Enter one prompt per line:",
         height=150,
@@ -215,9 +212,11 @@ def render_bot_builder():
     if initial_prompts != st.session_state.initial_prompts:
         st.session_state.initial_prompts = initial_prompts
 
-    # Chat interface
+    # 6. Chat interface
+    st.subheader("Test Your Bot")
+    st.caption("Try out your bot configuration with sample queries")
+    st.markdown("---")
     render_chat_interface()
-
 
 def render_chat_interface():
     """Render the chat interface for testing the bot."""
