@@ -184,51 +184,25 @@ intro_prompt = st.session_state.initial_prompts.split('\n')[0]
 conversation_starter = get_gemini_response(intro_prompt)
 st.markdown(conversation_starter)
 
-    # Chat interface
-    st.subheader("Test Your Bot")
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+# Chat interface
+st.subheader("Test Your Bot")
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-    if prompt := st.chat_input("Type a message to test your bot..."):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                response = get_gemini_response(prompt)
-                st.markdown(response)
-        st.session_state.messages.append({"role": "assistant", "content": response})
+if prompt := st.chat_input("Type a message to test your bot..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            response = get_gemini_response(prompt)
+            st.markdown(response)
+    st.session_state.messages.append({"role": "assistant", "content": response})
 
-else:
-    #
-    # === PROMPT GUIDANCE VIEW ===
-    #
-    st.markdown("## Elements of an Effective System Prompt")
-    guidance_content = """
-    
-    **1. Role / Persona**  
-    Define the chatbot's identity, expertise, and overall demeanor.
-    
-    **2. Purpose / Objective**  
-    State the chatbot's primary function and intended goals.
-    
-    **3. Context / Background**  
-    Provide any relevant situational or organizational information.
-    
-    **4. Style and Tone Guidelines**  
-    Specify language usage, formality level, and stylistic preferences.
-    
-    **5. Output Format / Structure**  
-    Outline how responses should be organized or formatted.
-    
-    **6. Constraints and Prohibitions**  
-    List topics, behaviors, or actions the bot must avoid.
-    
-    **7. Disclaimers**  
-    Include any mandatory disclaimers.
-    
-    **8. Stay in Character**  
-    Reinforce adherence to the defined role and instructions.
-    """
-    st.markdown(guidance_content)
+# Prompt Guidance View
+st.markdown("## Elements of an Effective System Prompt")
+guidance_content = """
+...
+"""
+st.markdown(guidance_content)
