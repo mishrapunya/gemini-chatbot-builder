@@ -15,7 +15,7 @@ st.set_page_config(
 load_dotenv()
 
 # 3. Read current 'view' from query params (default = "bot_builder")
-view = st.query_params().get("view", ["bot_builder"])[0]
+view = st.experimental_get_query_params().get("view", ["bot_builder"])[0]
 
 # 4. Initialize session state variables
 if "messages" not in st.session_state:
