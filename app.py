@@ -14,11 +14,33 @@ st.set_page_config(
     layout="wide"
 )
 
-# Apply minimal custom CSS directly
+# Apply improved but minimal custom CSS
 st.markdown("""
 <style>
+/* Header styling with better colors */
 h1, h2, h3, .stSubheader {
     color: #2563EB !important;
+    margin-bottom: 0.3rem !important;
+}
+
+/* Reduce spacing between elements */
+.stTextInput, .stTextArea, .stSelectbox {
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.7rem !important;
+}
+
+/* Form element styling */
+.stTextArea textarea {
+    background-color: #F9FAFB !important;
+}
+
+/* Chat message styling */
+.stChatMessage[data-testid="stChatMessageUser"] {
+    background-color: #EFF6FF !important;
+}
+
+.stChatMessage[data-testid="stChatMessageAssistant"] {
+    background-color: #F8FAFC !important;
 }
 </style>
 """, unsafe_allow_html=True)
