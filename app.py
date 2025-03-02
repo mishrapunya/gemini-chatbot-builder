@@ -14,42 +14,54 @@ st.set_page_config(
     layout="wide"
 )
 
-# Apply specific spacing fixes
+# Apply balanced spacing CSS
 st.markdown("""
 <style>
 /* Header styling with better colors */
 h1, h2, h3, .stSubheader {
     color: #2563EB !important;
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
+    margin-bottom: 0.2rem !important;
+    padding-bottom: 0.1rem !important;
+}
+
+/* Add some space at the top to prevent title cutoff */
+.main .block-container {
+    padding-top: 2rem !important;
 }
 
 /* Target the specific gap between header and input */
 label[data-testid="stText"], .stMarkdown p {
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-    line-height: 1.1 !important;
+    margin-bottom: 0.2rem !important;
+    padding-bottom: 0.1rem !important;
+    line-height: 1.3 !important;
 }
 
 /* Target spaces around text inputs and areas */
 .stTextInput div, .stTextArea div {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
+    padding-top: 0.2rem !important;
+    margin-top: 0.1rem !important;
 }
 
-/* Reduce caption spacing */
+/* Reduce caption spacing but keep it readable */
 small {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    line-height: 1 !important;
+    margin-top: 0.1rem !important;
+    margin-bottom: 0.1rem !important;
+    line-height: 1.2 !important;
 }
 
-/* Reduce space between sections */
+/* More balanced space between sections */
 section > div {
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
+    padding-top: 0.7rem !important;
+    padding-bottom: 0.7rem !important;
+}
+
+/* Chat message styling */
+.stChatMessage[data-testid="stChatMessageUser"] {
+    background-color: #EFF6FF !important;
+}
+
+.stChatMessage[data-testid="stChatMessageAssistant"] {
+    background-color: #F8FAFC !important;
 }
 </style>
 """, unsafe_allow_html=True)
