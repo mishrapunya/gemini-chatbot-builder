@@ -199,9 +199,9 @@ def render_bot_builder():
         st.session_state.initial_prompts = initial_prompts
 
     # 6. Chat interface
+    st.markdown("---")  # Horizontal line
     st.subheader("Test Your Bot")
-    st.caption("Try out your bot configuration with sample queries")
-    st.markdown("---")
+    # Remove the caption line
     render_chat_interface()
     
 def render_chat_interface():
