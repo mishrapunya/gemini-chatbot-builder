@@ -14,27 +14,9 @@ st.set_page_config(
     layout="wide"
 )
 
-# Apply custom CSS directly
-st.markdown("""
-<style>
-/* Reduce spacing between elements */
-h3, .stSubheader {
-    margin-bottom: 0.2rem !important;
-}
-
-/* Make input fields closer to their headers */
-.stTextInput, .stTextArea, .stSelectbox {
-    margin-top: 0.1rem !important;
-    margin-bottom: 0.8rem !important;
-}
-
-/* Caption text closer to elements */
-.stCaption, div[data-testid="caption"] {
-    margin-top: 0 !important;
-    margin-bottom: 0.2rem !important;
-}
-</style>
-""", unsafe_allow_html=True)
+# 2. Load custom CSS
+with open("styles.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # 3. Load environment variables
 load_dotenv()
@@ -67,10 +49,9 @@ if "document_context" not in st.session_state:
 if "current_view" not in st.session_state:
     st.session_state.current_view = "Bot Builder"
 
-# 5. Title & top description - ONLY shown in Bot Builder mode
-if st.session_state.current_view == "Bot Builder":
-    st.title("Chatbot Builder")
-    st.markdown("Configure and test your Gemini-powered chatbot with this builder interface.")
+# 5. Title & top description in the main area
+st.title("Chatbot Builder")
+st.markdown("Configure and test your Gemini-powered chatbot with this builder interface.")
 
 # 6. Sidebar for configuration
 with st.sidebar:
@@ -136,9 +117,13 @@ with st.sidebar:
 
 # 7. Main area: Navigation between Bot Builder and Prompt Guidance
 if st.session_state.current_view == "Bot Builder":
+    # Keep the title and description for Bot Builder view
+    st.title("Chatbot Builder")
+    st.markdown("Configure and test your Gemini-powered chatbot with this builder interface.")
     utils.render_bot_builder()
 else:
-    # Load and display the prompt guidance content from the markdown file
+    # For Prompt Guidance view, skip the general title and description
+    # and load the content directly
     with open("prompt_guidance.md", "r") as f:
         guidance_content = f.read()
     st.markdown(guidance_content)
