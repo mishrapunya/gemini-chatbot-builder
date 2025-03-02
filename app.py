@@ -46,12 +46,6 @@ if "initial_prompts" not in st.session_state:
 st.title("Chatbot Builder")
 st.markdown("Configure and test your Gemini-powered chatbot with this builder interface.")
 
- # "What is the name of your bot?"
-    st.subheader("What is the name of your bot?")
-    new_bot_name = st.text_input("", value=st.session_state.bot_name)
-    if new_bot_name != st.session_state.bot_name:
-        st.session_state.bot_name = new_bot_name
-
 # 5. Sidebar for configuration
 with st.sidebar:
     st.header("ChatBot Configuration")
@@ -161,9 +155,15 @@ if view == "Bot Builder":
     # === BOT BUILDER VIEW ===
     #
     
-# Choose a Template
-st.subheader("Set Your System Prompt (or choose a template)")
-templates = {
+    # "What is the name of your bot?"
+    st.subheader("What is the name of your bot?")
+    new_bot_name = st.text_input("", value=st.session_state.bot_name)
+    if new_bot_name != st.session_state.bot_name:
+        st.session_state.bot_name = new_bot_name
+
+    # Choose a Template
+    st.subheader("Choose a Template")
+    templates = {
         "Basic Assistant": """You are a helpful assistant named {bot_name}. You're friendly, concise, and informative. When answering questions, provide accurate information and be honest when you don't know something. Use examples when they help explain concepts.""",
         
         "Punny Professor": """You are the Punny Professor, a witty and knowledgeable educator who explains concepts using clever puns and wordplay.
@@ -302,6 +302,7 @@ Remember to remain in character as the world's most frustrating customer support
         st.session_state.previous_template = selected_template
 
     # Set your System Prompt
+    st.subheader("Set your System Prompt")
     st.caption("if you need help choose Prompt Guidance from the left menu")
 
     expanded_view = st.toggle("Expanded View", value=False)
@@ -310,7 +311,7 @@ Remember to remain in character as the world's most frustrating customer support
     if expanded_view:
         system_prompt = st.text_area(
             "",
-            height=400,
+            height=600,
             value=st.session_state.system_prompt
         )
     else:
