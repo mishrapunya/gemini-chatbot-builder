@@ -117,9 +117,13 @@ with st.sidebar:
 
 # 7. Main area: Navigation between Bot Builder and Prompt Guidance
 if st.session_state.current_view == "Bot Builder":
+    # Keep the title and description for Bot Builder view
+    st.title("Chatbot Builder")
+    st.markdown("Configure and test your Gemini-powered chatbot with this builder interface.")
     utils.render_bot_builder()
 else:
-    # Load and display the prompt guidance content from the markdown file
+    # For Prompt Guidance view, skip the general title and description
+    # and load the content directly
     with open("prompt_guidance.md", "r") as f:
         guidance_content = f.read()
     st.markdown(guidance_content)
