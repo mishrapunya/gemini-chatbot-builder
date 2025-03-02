@@ -14,33 +14,42 @@ st.set_page_config(
     layout="wide"
 )
 
-# Apply improved but minimal custom CSS
+# Apply specific spacing fixes
 st.markdown("""
 <style>
 /* Header styling with better colors */
 h1, h2, h3, .stSubheader {
     color: #2563EB !important;
-    margin-bottom: 0.3rem !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
 }
 
-/* Reduce spacing between elements */
-.stTextInput, .stTextArea, .stSelectbox {
-    margin-top: 0.2rem !important;
-    margin-bottom: 0.7rem !important;
+/* Target the specific gap between header and input */
+label[data-testid="stText"], .stMarkdown p {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    line-height: 1.1 !important;
 }
 
-/* Form element styling */
-.stTextArea textarea {
-    background-color: #F9FAFB !important;
+/* Target spaces around text inputs and areas */
+.stTextInput div, .stTextArea div {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
 }
 
-/* Chat message styling */
-.stChatMessage[data-testid="stChatMessageUser"] {
-    background-color: #EFF6FF !important;
+/* Reduce caption spacing */
+small {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    line-height: 1 !important;
 }
 
-.stChatMessage[data-testid="stChatMessageAssistant"] {
-    background-color: #F8FAFC !important;
+/* Reduce space between sections */
+section > div {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
 }
 </style>
 """, unsafe_allow_html=True)
