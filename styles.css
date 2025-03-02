@@ -1,0 +1,62 @@
+/* styles.css */
+
+/* Main application styling */
+.main .block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Header styling */
+h1, h2, h3, h4 {
+    color: #1E3A8A;
+}
+
+/* Custom styling for the sidebar */
+.sidebar .stButton>button {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Chat message styling */
+.stChatMessage {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* User message styling */
+.stChatMessage[data-testid="stChatMessageUser"] {
+    background-color: #E5E7EB;
+}
+
+/* Bot message styling */
+.stChatMessage[data-testid="stChatMessageAssistant"] {
+    background-color: #F3F4F6;
+}
+
+/* Text area styling */
+.stTextArea textarea {
+    border-radius: 0.5rem;
+    border-color: #D1D5DB;
+}
+
+/* Button styling */
+.stButton>button {
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+/* Export links styling */
+a[download] {
+    display: block;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background-color: #F3F4F6;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+a[download]:hover {
+    background-color: #E5E7EB;
+}
